@@ -1,7 +1,1 @@
-# pandora.htb
-
-This POC will create a reverse shell by chaining and exploiting some flaws in Pandora FMS per HackTheBox machine pandora.htb
-
-Author @nightwolfx2
-
-Cheers
+2022/02/09 - Added pandora.htb script to obtain a reverse shell (needs a local ssh tunnel via d**** user.
