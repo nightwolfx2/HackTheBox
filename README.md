@@ -1,1 +1,1 @@
-2022/02/09 - Added pandora.htb, vault.htb python scripts to obtain a reverse shell on each (See README.md for each exploit).
+I'm planning to release custom exploits for HTB inactive machines to spawn reverse shells on each machine whenever possible.
