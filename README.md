@@ -5,4 +5,4 @@ I'm planning to release custom exploits for HTB inactive machines to spawn rever
 * pandora.htb
 * celestial.htb
 * falafel.htb
-* 
+* unattended.htb
